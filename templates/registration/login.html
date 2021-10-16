@@ -1,0 +1,56 @@
+{% extends 'home.html' %}
+{% block content %}
+    <form class="form-signin text-center" action="{% url 'login' %}" method="post">
+        <h1 class="h3 mb-3 font-weight-normal">Por favor, efetue o login</h1>
+        <label for="inputEmail" class="sr-only">Email</label>
+        {% csrf_token %}
+        <input id="inputEmail" class="form-control" placeholder="Email" name="username" required="" autofocus="" type="email">
+        <label for="inputPassword" class="sr-only">Senha</label>
+        <input id="inputPassword" class="form-control" placeholder="Senha" name="password" required="" type="password">
+        <input type="submit" value="Login"
+               class="btn btn-lg btn-primary btn-block" />
+        <input type="hidden" name="next" value="{{ next }}" />
+        {% if form.errors %}
+                <p class=" label label-danger alert alert-danger">
+                    Usuario ou senha incorretos.
+                    Tente novamente.
+                </p>
+        {% endif %}
+    </form>
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
+
+        .form-signin {
+            width: 100%;
+            max-width: 330px;
+            padding: 15px;
+            margin: 0 auto;
+        }
+        .form-signin .checkbox {
+            font-weight: 400;
+        }
+        .form-signin .form-control {
+            position: relative;
+            box-sizing: border-box;
+            height: auto;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .form-signin .form-control:focus {
+            z-index: 2;
+        }
+        .form-signin input[type="email"] {
+            margin-bottom: -1px;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+        .form-signin input[type="password"] {
+            margin-bottom: 10px;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+    </style>
+{% endblock %}

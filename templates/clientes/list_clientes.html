@@ -1,0 +1,65 @@
+{% extends "home.html" %}
+{% block title %}
+    Clientes
+{% endblock %}
+{% block content %}
+    <h1>Lista de clientes</h1>
+    {% if cliente_list %}
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center pagination-sm">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1"><small>Pagina <strong>{{ page_obj.number }}</strong>. Exibindo <strong>{{ page_obj.object_list.count }}</strong> com total de <strong>{{ page_obj.paginator.count }}</strong> items.</small></a>
+                </li>
+
+            </ul>
+        </nav>
+
+        <div class="container">
+            <div class="row">
+                <form method='GET'>
+                    <div class="input-group">
+                        <div class="form-outline">
+                            <input type="search" id="form1" class="form-control" name="q_produto" value='{{ request.GET.q_produto }}'/>
+                            <label class="form-label" for="form1">Procurar Clientes</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+                <div class="table-responsive">
+                    <table class="table table-hover text-center table-bordered">
+                        <thead>
+                        <tr>
+                            <th scope="col">CPF</th>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Cidade</th>
+                            <th scope="col">Rua</th>
+                            <th scope="col">Numero</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for cliente in cliente_list %}
+                            <tr data-href="{% url 'cliente-update' cliente.pk %}" style="cursor: pointer">
+                                <th scope="row" >{{ cliente.pk }}</th>
+                                <td> {{ cliente.nome_cliente }} </td>
+                                <td> {{ cliente.cidade_cliente }} </td>
+                                <td> {{ cliente.rua_cliente }} </td>
+                                <td> {{ cliente.numero_cliente  }} </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <p>Não existe nenhum cliente cadastrado</p>
+    {% endif %}
+    {% include '_pagination.html' %}
+    <script>
+        $('tr[data-href]').on("click", function() {
+            document.location = $(this).data('href');
+        });
+    </script>
+{% endblock %}

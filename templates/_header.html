@@ -1,0 +1,54 @@
+<nav class="navbar navbar-expand-md navbar-light sticky-top" style="background-color: #e3f2fd">
+    <a class="navbar-brand" href="/">Loja Lunkes</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+            aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+            </li>
+            {% if user.is_authenticated %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="cadastrardropdown" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">Cadastrar</a>
+                    <div class="dropdown-menu" aria-labelledby="cadastrardropdown">
+                        {% if user.is_superuser %}
+                            <a class="dropdown-item" href="{% url 'usuario-add' %}">Usuario</a>
+                        {% endif %}
+                        <a class="dropdown-item" href="{% url 'cliente-add' %}">Cliente</a>
+                        <a class="dropdown-item" href="{% url 'fornecedor-add' %}">Fornecedor</a>
+                        <a class="dropdown-item" href="{% url 'product-add' %}">Produto</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="consultardropdown" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">Consultar</a>
+                    <div class="dropdown-menu" aria-labelledby="consultardropdown">
+                        <a class="dropdown-item" href="{% url 'product-list' %}">Produtos</a>
+                        <a class="dropdown-item" href="{% url 'cliente-list' %}">Clientes</a>
+                        <a class="dropdown-item" href="{% url 'fornecedor-list' %}">Fornecedores</a>
+                        {% if user.is_superuser %}
+                            <a class="dropdown-item" href="{% url 'usuario-list' %}">Usuarios</a>
+                        {% endif %}
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="financeirodropdown" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">Financeiro</a>
+                    <div class="dropdown-menu" aria-labelledby="financeirodropdown">
+                        <a class="dropdown-item" href="{% url 'venda-add' %}">Nova Venda</a>
+                        {% if user.is_superuser %}
+
+                            <a class="dropdown-item" href="{% url 'venda-list' %}">Contas à receber</a>
+                            <a class="dropdown-item" href="#">Contas à pagar</a>
+                            <a class="dropdown-item" href="{% url 'relatorio-vendas' %}">Relatorio</a>
+                        {% endif %}
+                    </div>
+                </li>
+                </ul>
+                <a class="btn btn-outline-secondary" href="{% url 'usuario-logout' %}">Sair</a>
+            {% endif %}
+    </div>
+</nav>

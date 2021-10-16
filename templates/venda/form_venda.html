@@ -1,0 +1,161 @@
+{% extends "home.html" %}
+
+{% block title %}
+    Adicionar nova venda
+{% endblock %}
+{% block content %}
+    <div class="container-fluid h-100">
+        <div class="row justify-content-center align-items-center h-100">
+            <div class="col col-sm-10 col-md-10 col-lg-10 col-xl-10">
+                <h4>Adicionar nova venda</h4>
+                <form action="" method="post">{% csrf_token %}
+                    <div class="table-responsive">
+                        <table class="table table-hover  table-bordered">
+                            {{ forms.as_table }}
+                        </table>
+                    </div>
+                    <div class="row" id="order">
+                        {% for item_order_form in formset %}
+                            <div class="table-responsive col-6">
+                                <div id="item-{{ forloop.counter0 }}">
+                                    <table class="table table-hover  table-bordered">
+                                        {% if item_order_form.non_field_errors %}
+                                            <div class="alert alert-danger">
+                                                {{ item_order_form.non_field_errors }}
+                                            </div>
+                                        {% endif %}
+                                        {% for field in item_order_form.visible_fields  %}
+                                            <tr>
+                                                <th>{{ field.label_tag }}</th>
+                                                <td>
+                                                    {% if field.errors %}
+                                                        <ul>
+                                                            {% for error in field.errors %}
+                                                                <li>{{ error }}</li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    {% endif %}
+                                                    {{ field }}
+                                                    {% if field.help_text %}
+                                                        <br />{{ field.help_text }}
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="row ">
+                        <button type="submit" class="btn btn-primary col-2">Salvar</button>
+                        <div class="col-1"></div>
+                        <a href="{% url 'venda-list' %}" class="btn btn-danger col-2">Cancelar</a>
+                    </div>
+                    {{ formset.management_form }}
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <a href="#" class="float" id="add-item">
+        <i class="fa fa-plus my-float"></i>
+    </a>
+
+    <script type="text/html" id="item-order">
+        <div id="item-__prefix__" class="table-responsive col-6">
+            <table class="table table-hover  table-bordered">
+                {{ formset.empty_form }}
+            </table>
+        </div>
+    </script>
+
+
+    <script>
+        $(document).ready(function(){
+            $("#add-item").click(function(ev) {
+                ev.preventDefault();
+                var count = $('#order').children().length;
+                var tmplMarkup = $("#item-order").html();
+                var compiledTmpl = tmplMarkup.replace(/__prefix__/g, count);
+                $("div#order").append(compiledTmpl);
+
+                // update form count
+                $('#id_itensvenda_set-TOTAL_FORMS').attr('value', count + 1);
+
+                $('.produto').click(function (){
+                    fetch(url_product.replace('1', '') + $('#item-'+count+' .produto').find(":selected").val()).then(r =>  r.json().then(data => ({status: r.status, body: data})))
+                        .then(obj => {
+                            $("#id_itensvenda_set-"+count+"-valor_unit_venda").val(obj.body.value);
+                            var sum = 0
+                            for (var i = 0; i < $('#order').children().length; i++) {
+                                sum+= parseFloat($('#item-'+i+' .valor_unit_venda').val() * $('#item-'+i+' .quantidade').val())
+                            }
+                            $('#id_valor_total_venda').val(sum)
+                        });
+                })
+                $('.quantidade').keyup(function (){
+                    var sum = 0
+                    for (var i = 0; i <= count; i++) {
+                        sum+= parseFloat($('#item-'+i+' .valor_unit_venda').val() * $('#item-'+i+' .quantidade').val())
+                    }
+                    $('#id_valor_total_venda').val(sum)
+                })
+                /*
+                    $('.valor_unit_venda').keyup(function (){
+                        let old = parseFloat($('#id_valor_total_venda').val())
+                        let new_value = old + parseFloat($('#id_itensvenda_set-'+ count + '-valor_unit_venda').val() * $('#id_itensvenda_set-'+ count + '-quantidade').val())
+                        $('#id_valor_total_venda').val(new_value)
+                    })
+                 */
+            });
+            $('.quantidade').keyup(function (){
+                var sum = 0
+                for (var i = 0; i < $('#order').children().length; i++) {
+                    sum+= parseFloat($('#item-'+i+' .valor_unit_venda').val() * $('#item-'+i+' .quantidade').val())
+                }
+                $('#id_valor_total_venda').val(sum)
+
+            })
+            var url_product = "{% url 'product-value' 1%}"
+            $('.produto').click(function (){
+                id = this.id.replace('id_itensvenda_set-', '').replace('-cod_produto', '')
+                fetch(url_product.replace('1', '') + $('#item-'+id+' .produto').find(":selected").val()).then(r =>  r.json().then(data => ({status: r.status, body: data})))
+                    .then(obj => {
+                        $("#id_itensvenda_set-"+id+"-valor_unit_venda").val(obj.body.value)
+                        var sum = 0
+                        for (var i = 0; i < $('#order').children().length; i++) {
+                            sum+= parseFloat($('#item-'+i+' .valor_unit_venda').val() * $('#item-'+i+' .quantidade').val())
+                        }
+                        $('#id_valor_total_venda').val(sum)}
+                    );
+
+            })
+            /*
+            $('.valor_unit_venda').keyup(function (){
+                $('#id_valor_total_venda').val($('#id_itensvenda_set-0-valor_unit_venda').val() * $('#id_itensvenda_set-0-quantidade').val())
+            })
+             */
+        });
+    </script>
+    <style>
+        .float{
+            position:fixed;
+            width:60px;
+            height:60px;
+            bottom:40px;
+            right:40px;
+            background-color:#0C9;
+            color:#FFF;
+            border-radius:50px;
+            text-align:center;
+            box-shadow: 2px 2px 3px #999;
+        }
+
+        .my-float{
+            margin-top:22px;
+        }
+    </style>
+{% endblock %}
+{% block footer %}
+{% endblock %}

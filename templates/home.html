@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %} Home {% endblock %}
+{% block header %}
+    {% include '_header.html' %}
+{% endblock %}
+{% block content %}
+    <main role="main">
+
+        <!-- Main jumbotron for a primary marketing message or call to action -->
+        <div class="jumbotron">
+            <div class="container">
+                <h1 class="display-3">Olá, {{ user.nome_usuario }}!</h1>
+                <p>This is a template for a simple marketing or informational website. It includes a large callout called a
+                    jumbotron and three supporting pieces of content. Use it as a starting point to create something more
+                    unique.</p>
+{#                <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p>#}
+            </div>
+        </div>
+
+        <div class="container">
+            <!-- Example row of columns -->
+            <div class="row">
+                {% if user.is_superuser %}
+                    <h4>Seja bem vindo {{ user.nome_usuario }}</h4>
+                    <div class="col-md-6">
+                        {% include 'relatorios/data_total.html' %}
+                    </div>
+                    <div class="col-md-6">
+                        {% include 'relatorios/valor_data.html' %}
+                    </div>
+                {% else %}
+                    <h4>Seja bem vindo {{ user.nome_usuario }}</h4>
+                {% endif %}
+            </div>
+
+            <hr>
+
+        </div> <!-- /container -->
+
+    </main>
+
+{% endblock %}
+
+{% block footer %}
+
+    <footer class="bg-dark text-center text-white sticky-bottom " >
+        <!-- Copyright -->
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+            © 2021 Projected by:
+            <a class="text-blue" target="_blank" href="https://github.com/bbiancaa/">Bianca</a>
+            Empowered by:
+            <a class="text-blue" target="_blank" href="https://github.com/mascDriver/">mascDriver</a>
+        </div>
+        <!-- Copyright -->
+    </footer>
+    <style>
+        html {
+            height: 100%;
+            box-sizing: border-box;
+        }
+
+        *,
+        *:before,
+        *:after {
+            box-sizing: inherit;
+        }
+        body {
+            position: relative;
+            margin: 0;
+            padding-bottom: 6rem;
+            min-height: 100%;
+            font-family: "Helvetica Neue", Arial, sans-serif;
+        }
+
+        footer {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            text-align: center;
+        }
+    </style>
+{% endblock %}

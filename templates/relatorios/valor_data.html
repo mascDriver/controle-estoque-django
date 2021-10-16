@@ -1,0 +1,49 @@
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <canvas id="vendasNumChart" width="300" height="300"></canvas>
+        </div>
+    </div>
+    <script>
+        var ctx = document.getElementById("vendasNumChart");
+        var dcount = JSON.parse('{{ dcount|safe }}');
+        var data_count = JSON.parse('{{ data_count|safe }}');
+
+        var productsChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: data_count,
+                datasets: [{
+                    label: 'Numero de vendas',
+                    data: dcount,
+                    backgroundColor: [
+                        'rgba(0, 500, 132, 0.2)',
+                        'rgba(0, 500, 235, 0.2)',
+                        'rgba(0, 500, 86, 0.2)',
+                        'rgba(0, 500, 192, 0.2)',
+                        'rgba(0, 500, 255, 0.2)',
+                        'rgba(0, 500, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(0,500,132,1)',
+                        'rgba(0, 500, 235, 1)',
+                        'rgba(0, 500, 86, 1)',
+                        'rgba(0, 500, 192, 1)',
+                        'rgba(0, 500, 255, 1)',
+                        'rgba(0, 500, 64, 1)'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "home.html" %}
+{% block title %}
+    Produtos
+{% endblock %}
+{% block content %}
+    {% if venda %}
+
+        <div class="container-fluid h-100">
+            <div class="row justify-content-center align-items-center h-100">
+                <div class="col col-sm-6 col-md-6 col-lg-4 col-xl-3">
+                    <h1>{{ venda.nome_produto }}</h1>
+
+                    <form action="" method="post">{% csrf_token %}
+                        {{ form.as_p }}
+                        <div class="row">
+                            <button type="submit" class="btn btn-primary col-5">Salvar</button>
+                            <div class="col-2"></div>
+                            <a href="{% url 'venda-list' %}" class="btn btn-danger col-5">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <h1 class="text">Não existe nenhum cliente cadastrado</h1>
+    {% endif %}
+{% endblock %}
